@@ -1,3 +1,5 @@
+import {Category} from './category.model';
+
 export interface Transaction {
   id: number;
   fechaOperacion: Date;
@@ -6,6 +8,6 @@ export interface Transaction {
   pagos: number;
   ingresos: number;
   saldo: number;
-  category: string;
+  category: Category;
   notes?: string;
 }
