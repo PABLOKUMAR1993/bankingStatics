@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Vista Previa de Datos</h2>
+
+<mat-dialog-content class="dialog-content">
+  <div class="preview-info">
+    <p>Se han encontrado <strong>{{ data.length }}</strong> registros en el archivo Excel</p>
+  </div>
+  
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="preview-table">
+      
+      <ng-container matColumnDef="fechaOperacion">
+        <th mat-header-cell *matHeaderCellDef>Fecha Operación</th>
+        <td mat-cell *matCellDef="let element">{{ element.fechaOperacion | date:'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="concepto">
+        <th mat-header-cell *matHeaderCellDef>Concepto</th>
+        <td mat-cell *matCellDef="let element">{{ element.concepto }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaValor">
+        <th mat-header-cell *matHeaderCellDef>Fecha Valor</th>
+        <td mat-cell *matCellDef="let element">{{ element.fechaValor | date:'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="pagos">
+        <th mat-header-cell *matHeaderCellDef>Pagos</th>
+        <td mat-cell *matCellDef="let element" [class.negative]="element.pagos < 0">
+          {{ element.pagos | currency:'EUR':'symbol':'1.2-2' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ingresos">
+        <th mat-header-cell *matHeaderCellDef>Ingresos</th>
+        <td mat-cell *matCellDef="let element" [class.positive]="element.ingresos > 0">
+          {{ element.ingresos | currency:'EUR':'symbol':'1.2-2' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="saldo">
+        <th mat-header-cell *matHeaderCellDef>Saldo</th>
+        <td mat-cell *matCellDef="let element">{{ element.saldo | currency:'EUR':'symbol':'1.2-2' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Categoría</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill" style="width: 100%; font-size: 0.9rem;">
+            <mat-select 
+              [value]="element.selectedCategory" 
+              (selectionChange)="onCategoryChange(element, $event.value)"
+              placeholder="Seleccionar categoría">
+              <mat-option *ngFor="let category of categories" [value]="category">
+                <span [style.color]="category.color">●</span> {{ category.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [style]="getRowStyle(row)"></tr>
+    </table>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()" [disabled]="isImporting">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="isImporting">
+    <mat-spinner *ngIf="isImporting" diameter="20" style="margin-right: 8px;"></mat-spinner>
+    {{ isImporting ? 'Importando...' : 'Importar Datos' }}
+  </button>
+</mat-dialog-actions>
