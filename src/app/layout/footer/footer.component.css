@@ -1,0 +1,54 @@
+.footer-container {
+  background-color: #424242;
+  color: white;
+  padding: 2rem;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.company-info h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.project-description {
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+  max-width: 600px;
+  color: #e0e0e0;
+  font-weight: 300;
+}
+
+.contact-links {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.social-link {
+  color: white;
+}
+
+.social-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .contact-links {
+    justify-content: center;
+  }
+}

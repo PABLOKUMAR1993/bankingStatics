@@ -1,0 +1,17 @@
+<footer class="footer-container">
+  <div class="footer-content">
+    <div class="company-info">
+      <h3>{{ companyName }}</h3>
+      <p class="project-description">{{ projectDescription }}</p>
+    </div>
+    
+    <div class="contact-links">
+      <a mat-icon-button [href]="linkedinUrl" target="_blank" class="social-link">
+        <mat-icon>business</mat-icon>
+      </a>
+      <a mat-icon-button [href]="'mailto:' + gmailAddress" class="social-link">
+        <mat-icon>email</mat-icon>
+      </a>
+    </div>
+  </div>
+</footer>
