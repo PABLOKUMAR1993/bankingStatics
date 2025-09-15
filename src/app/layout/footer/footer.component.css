@@ -3,6 +3,7 @@
   color: white;
   padding: 2rem;
   margin-top: auto;
+  height: 100px;
 }
 
 .footer-content {
@@ -47,7 +48,7 @@
     flex-direction: column;
     text-align: center;
   }
-  
+
   .contact-links {
     justify-content: center;
   }
