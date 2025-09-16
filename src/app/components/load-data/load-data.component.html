@@ -1,6 +1,5 @@
 <div class="load-data-container">
   <h1>Cargar Datos</h1>
-
   <div class="drop-zone"
        (dragover)="onDragOver($event)"
        (dragleave)="onDragLeave($event)"
@@ -25,13 +24,11 @@
       </p>
     </div>
   </div>
-
   <input #fileInput
          type="file"
          accept=".xlsx,.xls"
          class="hidden-input"
          (change)="onFileSelected($event)">
-
   <p class="description-text">
     Selecciona un fichero de formato excel con los movimientos del banco para actualizar tus datos.
   </p>

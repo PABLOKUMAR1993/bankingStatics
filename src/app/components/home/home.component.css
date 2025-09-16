@@ -3,6 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  width: 100%;
+  height: calc(100vh - 284px);
+  flex: 1;
+  padding: 20px;
   text-align: center;
+  gap: 30px;
 }

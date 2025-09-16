@@ -1,4 +1,12 @@
 .analyze-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 284px);
+  flex: 1;
   padding: 20px;
   text-align: center;
+  gap: 30px;
 }
