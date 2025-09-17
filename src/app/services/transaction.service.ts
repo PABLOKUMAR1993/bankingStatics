@@ -31,7 +31,7 @@ export class TransactionService {
     return this.http.post<Transaction>(this.baseUrl, transaction);
   }
 
-  public update(id: number, transaction: Partial<Transaction>): Observable<Transaction> {
+  public update(id: number, transaction: Transaction): Observable<Transaction> {
     return this.http.put<Transaction>(`${this.baseUrl}/${id}`, transaction);
   }
 
@@ -44,7 +44,7 @@ export class TransactionService {
     return new Observable(observer => {
       const results: Transaction[] = [];
       let completed = 0;
-      
+
       requests.forEach((request, index) => {
         request.subscribe({
           next: (result) => {
