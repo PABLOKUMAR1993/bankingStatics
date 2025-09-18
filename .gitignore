@@ -43,4 +43,5 @@ testem.log
 Thumbs.db
 
 # db
+./src/server
 ./src/server/db.json
