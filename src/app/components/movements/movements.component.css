@@ -1,0 +1,294 @@
+.movements-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: #fafafa;
+}
+
+.header-card {
+  margin-bottom: 24px;
+}
+
+.header-card mat-card-title {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #1976d2;
+  margin: 0;
+}
+
+.header-card mat-card-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 8px 0 0 0;
+}
+
+.table-card {
+  margin-bottom: 24px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px;
+  gap: 16px;
+}
+
+.loading-container p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.table-container {
+  padding: 16px;
+}
+
+.page-size-selector {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.page-size-selector mat-form-field {
+  width: 200px;
+}
+
+/* Summary Card Styles */
+.summary-card {
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  color: white;
+}
+
+.summary-card mat-card-title {
+  color: white;
+  font-weight: 500;
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.summary-date {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.summary-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: 'Roboto Mono', monospace;
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.transactions-table {
+  width: 100%;
+  background: white;
+}
+
+.transactions-table .mat-mdc-header-row {
+  background-color: #f5f5f5;
+}
+
+.transactions-table .mat-mdc-header-cell {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.transactions-table .mat-mdc-row {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.transactions-table .mat-mdc-row:hover {
+  background-color: #f8f9fa;
+}
+
+.transactions-table .mat-mdc-cell {
+  padding: 16px 12px;
+  border-bottom: none;
+}
+
+.concepto-cell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.amount-cell {
+  text-align: right;
+  font-weight: 600;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+}
+
+.amount-cell.positive {
+  color: #4caf50;
+}
+
+.amount-cell.negative {
+  color: #f44336;
+}
+
+.amount-cell.saldo {
+  color: #1976d2;
+  font-weight: 700;
+}
+
+/* Category Select Styles */
+.category-select {
+  width: 100%;
+  min-width: 140px;
+}
+
+.category-select .mat-mdc-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.category-select .mat-mdc-form-field-flex {
+  height: 48px;
+  align-items: center;
+}
+
+.category-select .mdc-notched-outline {
+  border-radius: 8px;
+}
+
+.category-select .mat-mdc-select {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.category-option {
+  color: white !important;
+  font-weight: 500;
+  margin: 2px 0;
+  border-radius: 4px;
+}
+
+/* Paginator */
+mat-paginator {
+  margin-top: 16px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* No Data Card */
+.no-data-card {
+  margin: 48px 0;
+  text-align: center;
+}
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+  color: #666;
+}
+
+.no-data mat-icon {
+  font-size: 4rem;
+  width: 4rem;
+  height: 4rem;
+  color: #ccc;
+}
+
+.no-data p {
+  font-size: 1.1rem;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .movements-container {
+    padding: 16px;
+  }
+  
+  .header-card mat-card-title {
+    font-size: 1.5rem;
+  }
+  
+  .header-card mat-card-subtitle {
+    font-size: 1rem;
+  }
+  
+  .table-container {
+    padding: 8px;
+  }
+  
+  .page-size-selector {
+    justify-content: center;
+  }
+  
+  .page-size-selector mat-form-field {
+    width: 150px;
+  }
+  
+  .transactions-table {
+    font-size: 0.875rem;
+  }
+  
+  .transactions-table .mat-mdc-cell {
+    padding: 12px 8px;
+  }
+  
+  .concepto-cell {
+    max-width: 200px;
+  }
+  
+  .summary-amount {
+    font-size: 1.5rem;
+  }
+  
+  .category-select {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .movements-container {
+    padding: 8px;
+  }
+  
+  .summary-content {
+    text-align: center;
+  }
+  
+  .summary-item {
+    justify-content: center;
+  }
+  
+  .transactions-table .mat-mdc-cell {
+    padding: 8px 4px;
+  }
+}

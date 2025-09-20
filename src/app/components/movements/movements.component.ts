@@ -7,13 +7,18 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
 import { Transaction } from '../../model/transaction.model';
 import { Category } from '../../model/category.model';
+import { TransactionSearchParams } from '../../model/transaction-search-params.model';
+import { CriteriaResponse } from '../../model/criteria-response.model';
 import { TransactionService } from '../../services/transaction.service';
 import { CategoryService } from '../../services/category.service';
 
 @Component({
-  selector: 'app-analyze-data',
+  selector: 'app-movements',
   standalone: true,
   imports: [
     CommonModule,
@@ -23,12 +28,15 @@ import { CategoryService } from '../../services/category.service';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatIconModule
   ],
-  templateUrl: './analyze-data.component.html',
-  styleUrl: './analyze-data.component.css'
+  templateUrl: './movements.component.html',
+  styleUrl: './movements.component.css'
 })
-export class AnalyzeDataComponent implements OnInit {
+export class MovementsComponent implements OnInit {
 
   transactions: Transaction[] = [];
   categories: Category[] = [];
@@ -36,6 +44,12 @@ export class AnalyzeDataComponent implements OnInit {
   loading = true;
   displayedColumns: string[] = ['fechaOperacion', 'concepto', 'categoria', 'pagos', 'ingresos', 'saldo'];
   summaryColumns: string[] = ['tipo', 'saldo'];
+  
+  // Pagination properties
+  currentPage = 0;
+  pageSize = 10;
+  totalElements = 0;
+  pageSizeOptions = [5, 10, 25, 50, 100];
 
   constructor(
     private transactionService: TransactionService,
@@ -49,10 +63,16 @@ export class AnalyzeDataComponent implements OnInit {
 
   private loadTransactions(): void {
     this.loading = true;
-    this.transactionService.getAll().subscribe({
-      next: (transactions) => {
-        this.transactions = transactions;
-        this.latestTransaction = this.getLatestTransaction(transactions);
+    const searchParams: TransactionSearchParams = {
+      pageNumber: this.currentPage,
+      pageSize: this.pageSize
+    };
+    
+    this.transactionService.getByCriteria(searchParams).subscribe({
+      next: (response: CriteriaResponse) => {
+        this.transactions = response.elements;
+        this.totalElements = response.totalElementsFound;
+        this.latestTransaction = this.getLatestTransaction(response.elements);
         this.loading = false;
       },
       error: (error) => {
@@ -60,6 +80,18 @@ export class AnalyzeDataComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  onPageChange(event: any): void {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadTransactions();
+  }
+
+  onPageSizeChange(newPageSize: number): void {
+    this.pageSize = newPageSize;
+    this.currentPage = 0;
+    this.loadTransactions();
   }
 
   private getLatestTransaction(transactions: Transaction[]): Transaction | null {
@@ -107,7 +139,7 @@ export class AnalyzeDataComponent implements OnInit {
       category: newCategory
     };
 
-    this.transactionService.update(transaction.id, updatedTransaction).subscribe({
+    this.transactionService.updateOne(transaction.id, updatedTransaction).subscribe({
       next: (result) => {
         const index = this.transactions.findIndex(t => t.id === transaction.id);
         if (index !== -1) {

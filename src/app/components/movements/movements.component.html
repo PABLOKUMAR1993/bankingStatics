@@ -1,16 +1,12 @@
-<div class="analyze-data-container">
-  <mat-card class="header-card">
+<div class="movements-container">
+  <mat-card class="header-card" appearance="outlined">
     <mat-card-header>
-      <mat-card-title>
-        <h1>Análisis de Datos</h1>
-      </mat-card-title>
-      <mat-card-subtitle>
-        <h4>Visualiza todas tus transacciones</h4>
-      </mat-card-subtitle>
+      <mat-card-title>Movimientos</mat-card-title>
+      <mat-card-subtitle>Visualiza y gestiona todas tus transacciones</mat-card-subtitle>
     </mat-card-header>
   </mat-card>
 
-  <mat-card class="table-card">
+  <mat-card class="table-card" appearance="outlined"
     <mat-card-content>
       <div *ngIf="loading" class="loading-container">
         <mat-spinner></mat-spinner>
@@ -18,29 +14,37 @@
       </div>
 
       <div *ngIf="!loading" class="table-container">
-        <!-- Summary Table -->
-        <table mat-table [dataSource]="latestTransaction ? [latestTransaction] : []" class="summary-table" *ngIf="latestTransaction">
+        <!-- Page Size Selector -->
+        <div class="page-size-selector">
+          <mat-form-field appearance="outline">
+            <mat-label>Elementos por página</mat-label>
+            <mat-select [value]="pageSize" (selectionChange)="onPageSizeChange($event.value)">
+              <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
+                {{ size }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Summary Card -->
+        <mat-card class="summary-card" appearance="outlined" *ngIf="latestTransaction">
+          <mat-card-header>
+            <mat-card-title>Resumen</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="summary-content">
+              <div class="summary-item">
+                <span class="summary-label">Saldo Actual</span>
+                <span class="summary-date">({{ formatDate(latestTransaction.fechaOperacion) }})</span>
+              </div>
+              <div class="summary-amount">{{ formatCurrency(latestTransaction.saldo) }}</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
 
-          <ng-container matColumnDef="tipo">
-            <th mat-header-cell *matHeaderCellDef>Resumen</th>
-            <td mat-cell *matCellDef="let transaction" class="summary-label">
-              Saldo Actual ({{ formatDate(transaction.fechaOperacion) }})
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="saldo">
-            <th mat-header-cell *matHeaderCellDef>Saldo</th>
-            <td mat-cell *matCellDef="let transaction" class="summary-amount">
-              {{ formatCurrency(transaction.saldo) }}
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="summaryColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: summaryColumns;" class="summary-row"></tr>
-        </table>
 
         <!-- Transactions Table -->
-        <table mat-table [dataSource]="transactions" class="transactions-table">
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="transactions" class="transactions-table mat-elevation-z2">
 
           <ng-container matColumnDef="fechaOperacion">
             <th mat-header-cell *matHeaderCellDef>Fecha</th>
@@ -55,7 +59,7 @@
           <ng-container matColumnDef="categoria">
             <th mat-header-cell *matHeaderCellDef>Categoría</th>
             <td mat-cell *matCellDef="let transaction">
-              <mat-form-field appearance="fill" class="category-select">
+              <mat-form-field appearance="outline" class="category-select"
                 <mat-select
                   [ngModel]="transaction.category.id"
                   (ngModelChange)="onCategoryChange(transaction, $event)"
@@ -97,11 +101,27 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-
-        <div *ngIf="transactions.length === 0" class="no-data">
-          <p>No hay transacciones disponibles</p>
+          </table>
         </div>
+
+        <!-- Paginator -->
+        <mat-paginator
+          [length]="totalElements"
+          [pageSize]="pageSize"
+          [pageIndex]="currentPage"
+          [pageSizeOptions]="pageSizeOptions"
+          (page)="onPageChange($event)"
+          showFirstLastButtons>
+        </mat-paginator>
+
+        <mat-card *ngIf="transactions.length === 0" class="no-data-card" appearance="outlined">
+          <mat-card-content>
+            <div class="no-data">
+              <mat-icon>inbox</mat-icon>
+              <p>No hay transacciones disponibles</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
       </div>
     </mat-card-content>
   </mat-card>
