@@ -1,106 +1,220 @@
 <div class="movements-container">
-  <mat-card class="header-card" appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Movimientos</mat-card-title>
-      <mat-card-subtitle>Visualiza y gestiona todas tus transacciones</mat-card-subtitle>
-    </mat-card-header>
-  </mat-card>
+  <!-- Header -->
+  <div class="page-header">
+    <h1>Movimientos</h1>
+    <p class="page-subtitle">Visualiza y gestiona todas tus transacciones</p>
+  </div>
 
-  <mat-card class="table-card" appearance="outlined"
-    <mat-card-content>
-      <div *ngIf="loading" class="loading-container">
-        <mat-spinner></mat-spinner>
-        <p>Cargando transacciones...</p>
-      </div>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando transacciones...</p>
+  </div>
 
-      <div *ngIf="!loading" class="table-container">
-        <!-- Page Size Selector -->
-        <div class="page-size-selector">
-          <mat-form-field appearance="outline">
-            <mat-label>Elementos por página</mat-label>
-            <mat-select [value]="pageSize" (selectionChange)="onPageSizeChange($event.value)">
-              <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
-                {{ size }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+  <!-- Content -->
+  <div *ngIf="!loading">
+    <!-- Filter Section -->
+    <mat-card class="filter-card">
+      <mat-card-content>
+        <div class="filter-header">
+          <button mat-button (click)="toggleFilters()" class="filter-toggle">
+            <mat-icon>{{ showFilters ? 'expand_less' : 'expand_more' }}</mat-icon>
+            Filtros y Ordenación
+          </button>
         </div>
-        <!-- Summary Card -->
-        <mat-card class="summary-card" appearance="outlined" *ngIf="latestTransaction">
-          <mat-card-header>
-            <mat-card-title>Resumen</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="summary-content">
-              <div class="summary-item">
-                <span class="summary-label">Saldo Actual</span>
-                <span class="summary-date">({{ formatDate(latestTransaction.fechaOperacion) }})</span>
-              </div>
-              <div class="summary-amount">{{ formatCurrency(latestTransaction.saldo) }}</div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-
-        <!-- Transactions Table -->
-        <div class="table-wrapper">
-          <table mat-table [dataSource]="transactions" class="transactions-table mat-elevation-z2">
-
-          <ng-container matColumnDef="fechaOperacion">
-            <th mat-header-cell *matHeaderCellDef>Fecha</th>
-            <td mat-cell *matCellDef="let transaction">{{ formatDate(transaction.fechaOperacion) }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="concepto">
-            <th mat-header-cell *matHeaderCellDef>Concepto</th>
-            <td mat-cell *matCellDef="let transaction" class="concepto-cell">{{ transaction.concepto }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="categoria">
-            <th mat-header-cell *matHeaderCellDef>Categoría</th>
-            <td mat-cell *matCellDef="let transaction">
-              <mat-form-field appearance="outline" class="category-select"
-                <mat-select
-                  [ngModel]="transaction.category.id"
-                  (ngModelChange)="onCategoryChange(transaction, $event)"
-                  [style.color]="transaction.category.color"
-                  [placeholder]="transaction.category.name">
-                  <mat-option
-                    *ngFor="let category of categories"
-                    [value]="category.id"
-                    [style.background-color]="category.color" class="category-option">
-                    {{ category.name }}
+        
+        <div *ngIf="showFilters" class="filter-content">
+          <form [formGroup]="filterForm">
+            <div class="filter-grid">
+              <!-- Date Filters -->
+              <mat-form-field>
+                <mat-label>Fecha Operación Desde</mat-label>
+                <input matInput [matDatepicker]="operationFromPicker" formControlName="operationDateFrom" (dateChange)="onFilterChange()">
+                <mat-datepicker-toggle matIconSuffix [for]="operationFromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #operationFromPicker></mat-datepicker>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Fecha Operación Hasta</mat-label>
+                <input matInput [matDatepicker]="operationToPicker" formControlName="operationDateTo" (dateChange)="onFilterChange()">
+                <mat-datepicker-toggle matIconSuffix [for]="operationToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #operationToPicker></mat-datepicker>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Fecha Valor Desde</mat-label>
+                <input matInput [matDatepicker]="valueFromPicker" formControlName="valueDateFrom" (dateChange)="onFilterChange()">
+                <mat-datepicker-toggle matIconSuffix [for]="valueFromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #valueFromPicker></mat-datepicker>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Fecha Valor Hasta</mat-label>
+                <input matInput [matDatepicker]="valueToPicker" formControlName="valueDateTo" (dateChange)="onFilterChange()">
+                <mat-datepicker-toggle matIconSuffix [for]="valueToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #valueToPicker></mat-datepicker>
+              </mat-form-field>
+              
+              <!-- Search and Amount Filters -->
+              <mat-form-field>
+                <mat-label>Concepto</mat-label>
+                <input matInput formControlName="concept" placeholder="Buscar..." (keydown.enter)="onFilterChange()">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Pagos Desde</mat-label>
+                <input matInput type="number" formControlName="paymentAmountFrom" (keydown.enter)="onFilterChange()">
+                <span matTextSuffix>€</span>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Pagos Hasta</mat-label>
+                <input matInput type="number" formControlName="paymentAmountTo" (keydown.enter)="onFilterChange()">
+                <span matTextSuffix>€</span>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Ingresos Desde</mat-label>
+                <input matInput type="number" formControlName="incomeAmountFrom" (keydown.enter)="onFilterChange()">
+                <span matTextSuffix>€</span>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Ingresos Hasta</mat-label>
+                <input matInput type="number" formControlName="incomeAmountTo" (keydown.enter)="onFilterChange()">
+                <span matTextSuffix>€</span>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Categorías</mat-label>
+                <mat-select formControlName="categoryIds" multiple (selectionChange)="onFilterChange()">
+                  <mat-option *ngFor="let category of categories" [value]="category.id">
+                    <span class="category-chip" [style.background-color]="category.color">
+                      {{ category.name }}
+                    </span>
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-            </td>
-          </ng-container>
+              
+              <mat-form-field>
+                <mat-label>Ordenar por</mat-label>
+                <mat-select formControlName="sortBy" (selectionChange)="onFilterChange()">
+                  <mat-option *ngFor="let option of sortOptions" [value]="option.value">
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              
+              <mat-form-field>
+                <mat-label>Dirección</mat-label>
+                <mat-select formControlName="sortDirection" (selectionChange)="onFilterChange()">
+                  <mat-option *ngFor="let option of sortDirectionOptions" [value]="option.value">
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="filter-actions">
+              <button mat-raised-button color="primary" (click)="onFilterChange()">
+                <mat-icon>search</mat-icon>
+                Buscar
+              </button>
+              <button mat-button (click)="clearFilters()">
+                <mat-icon>clear</mat-icon>
+                Limpiar
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <!-- Summary Card -->
+    <mat-card class="summary-card" *ngIf="currentBalance && currentBalance.hasTransactions">
+      <mat-card-content>
+        <div class="summary-content">
+          <div class="summary-info">
+            <h3>Saldo Actual</h3>
+            <p class="summary-date" *ngIf="currentBalance.lastTransactionDate">
+              Última transacción: {{ formatDate(currentBalance.lastTransactionDate) }}
+            </p>
+          </div>
+          <div class="summary-amount">{{ formatCurrency(currentBalance.currentBalance) }}</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
-          <ng-container matColumnDef="pagos">
-            <th mat-header-cell *matHeaderCellDef>Pagos</th>
-            <td mat-cell *matCellDef="let transaction" class="amount-cell negative">
-              <span *ngIf="transaction.pagos">{{ formatCurrency(transaction.pagos) }}</span>
-              <span *ngIf="!transaction.pagos">-</span>
-            </td>
-          </ng-container>
+    <!-- Transactions Table -->
+    <mat-card class="table-card">
+      <mat-card-content>
+        <div class="table-header">
+          <h2>Transacciones ({{ totalElements }} resultados)</h2>
+        </div>
+        
+        <div class="table-container">
+          <table mat-table [dataSource]="transactions" class="transactions-table">
 
-          <ng-container matColumnDef="ingresos">
-            <th mat-header-cell *matHeaderCellDef>Ingresos</th>
-            <td mat-cell *matCellDef="let transaction" class="amount-cell positive">
-              <span *ngIf="transaction.ingresos">{{ formatCurrency(transaction.ingresos) }}</span>
-              <span *ngIf="!transaction.ingresos">-</span>
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="fechaOperacion">
+              <th mat-header-cell *matHeaderCellDef>Fecha</th>
+              <td mat-cell *matCellDef="let transaction">{{ formatDate(transaction.fechaOperacion) }}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="saldo">
-            <th mat-header-cell *matHeaderCellDef>Saldo</th>
-            <td mat-cell *matCellDef="let transaction" class="amount-cell saldo">
-              {{ formatCurrency(transaction.saldo) }}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="concepto">
+              <th mat-header-cell *matHeaderCellDef>Concepto</th>
+              <td mat-cell *matCellDef="let transaction" class="concepto-cell">{{ transaction.concepto }}</td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <ng-container matColumnDef="categoria">
+              <th mat-header-cell *matHeaderCellDef>Categoría</th>
+              <td mat-cell *matCellDef="let transaction">
+                <mat-select 
+                  [value]="transaction.category.id"
+                  (selectionChange)="onCategoryChange(transaction, $event.value)"
+                  class="category-select">
+                  <mat-select-trigger>
+                    <span class="category-chip-selected" [style.background-color]="transaction.category.color">
+                      {{ transaction.category.name }}
+                    </span>
+                  </mat-select-trigger>
+                  <mat-option 
+                    *ngFor="let category of categories"
+                    [value]="category.id">
+                    <span class="category-option" [style.background-color]="category.color">
+                      {{ category.name }}
+                    </span>
+                  </mat-option>
+                </mat-select>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pagos">
+              <th mat-header-cell *matHeaderCellDef class="amount-header">Pagos</th>
+              <td mat-cell *matCellDef="let transaction" class="amount-cell negative">
+                <span *ngIf="transaction.pagos">{{ formatCurrency(transaction.pagos) }}</span>
+                <span *ngIf="!transaction.pagos" class="no-amount">-</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ingresos">
+              <th mat-header-cell *matHeaderCellDef class="amount-header">Ingresos</th>
+              <td mat-cell *matCellDef="let transaction" class="amount-cell positive">
+                <span *ngIf="transaction.ingresos">{{ formatCurrency(transaction.ingresos) }}</span>
+                <span *ngIf="!transaction.ingresos" class="no-amount">-</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="saldo">
+              <th mat-header-cell *matHeaderCellDef class="amount-header">Saldo</th>
+              <td mat-cell *matCellDef="let transaction" class="amount-cell saldo">
+                {{ formatCurrency(transaction.saldo) }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="transaction-row"></tr>
           </table>
         </div>
 
@@ -111,18 +225,17 @@
           [pageIndex]="currentPage"
           [pageSizeOptions]="pageSizeOptions"
           (page)="onPageChange($event)"
-          showFirstLastButtons>
+          showFirstLastButtons
+          class="table-paginator">
         </mat-paginator>
+      </mat-card-content>
+    </mat-card>
 
-        <mat-card *ngIf="transactions.length === 0" class="no-data-card" appearance="outlined">
-          <mat-card-content>
-            <div class="no-data">
-              <mat-icon>inbox</mat-icon>
-              <p>No hay transacciones disponibles</p>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </mat-card-content>
-  </mat-card>
+    <!-- Empty State -->
+    <div *ngIf="transactions.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">account_balance_wallet</mat-icon>
+      <h3>No hay transacciones</h3>
+      <p>No se encontraron transacciones que coincidan con los filtros aplicados</p>
+    </div>
+  </div>
 </div>

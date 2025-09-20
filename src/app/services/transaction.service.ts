@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Transaction } from '../model/transaction.model';
 import { TransactionSearchParams } from '../model/transaction-search-params.model';
 import { CriteriaResponse } from '../model/criteria-response.model';
+import { CurrentBalanceResponse } from '../model/current-balance-response.model';
 import { API_CONFIG } from '../constants/api.constants';
 
 @Injectable({
@@ -31,6 +32,10 @@ export class TransactionService {
 
   public getByCriteria(searchParams: TransactionSearchParams): Observable<CriteriaResponse> {
     return this.http.post<CriteriaResponse>(`${this.baseUrl}${API_CONFIG.ENDPOINTS.TRANSACTIONS.SEARCH}`, searchParams);
+  }
+
+  public getCurrentBalance(): Observable<CurrentBalanceResponse> {
+    return this.http.get<CurrentBalanceResponse>(`${this.baseUrl}${API_CONFIG.ENDPOINTS.TRANSACTIONS.CURRENT_BALANCE}`);
   }
 
 }

@@ -11,7 +11,8 @@ export const API_CONFIG = {
       BASE: '/api/v1/transactions',
       UPDATE: (id: number): string => `/api/v1/transactions/${id}`,
       BULK_CREATE: '/api/v1/transactions/bulk-create',
-      SEARCH: '/api/v1/transactions/search'
+      SEARCH: '/api/v1/transactions/search',
+      CURRENT_BALANCE: '/api/v1/transactions/current-balance'
     }
   }
 };

@@ -1,136 +1,182 @@
+/* Container */
 .movements-container {
   padding: 24px;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   background-color: #fafafa;
+  min-height: 100vh;
 }
 
-.header-card {
-  margin-bottom: 24px;
+/* Page Header */
+.page-header {
+  margin-bottom: 32px;
 }
 
-.header-card mat-card-title {
-  font-size: 2rem;
-  font-weight: 500;
-  color: #1976d2;
+.page-header h1 {
+  font-size: 2.125rem;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.6);
   margin: 0;
 }
 
-.header-card mat-card-subtitle {
-  font-size: 1.1rem;
-  color: #666;
-  margin: 8px 0 0 0;
-}
-
-.table-card {
-  margin-bottom: 24px;
-}
-
+/* Loading */
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px;
-  gap: 16px;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 24px;
 }
 
 .loading-container p {
   font-size: 1rem;
-  color: #666;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0;
 }
 
-.table-container {
-  padding: 16px;
-}
-
-.page-size-selector {
+/* Filter Card */
+.filter-card {
   margin-bottom: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-header {
+  margin-bottom: 16px;
+}
+
+.filter-toggle {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  padding: 8px 16px;
+  text-transform: none;
+  background: transparent;
+  border-radius: 4px;
 }
 
-.page-size-selector mat-form-field {
-  width: 200px;
+.filter-content {
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-/* Summary Card Styles */
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.category-chip {
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Summary Card */
 .summary-card {
   margin-bottom: 24px;
-  background: linear-gradient(135deg, #1976d2, #1565c0);
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
   color: white;
-}
-
-.summary-card mat-card-title {
-  color: white;
-  font-weight: 500;
+  border-radius: 8px;
 }
 
 .summary-content {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.summary-item {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  padding: 8px 0;
 }
 
-.summary-label {
-  font-size: 1.1rem;
+.summary-info h3 {
+  font-size: 1.25rem;
   font-weight: 500;
+  margin: 0 0 4px 0;
+  color: white;
 }
 
 .summary-date {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: 0.875rem;
+  margin: 0;
+  opacity: 0.9;
 }
 
 .summary-amount {
   font-size: 2rem;
-  font-weight: 700;
-  font-family: 'Roboto Mono', monospace;
-  text-align: center;
-  padding: 16px 0;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  text-align: right;
 }
 
-/* Table Wrapper */
-.table-wrapper {
+/* Table Card */
+.table-card {
   border-radius: 8px;
-  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+  padding: 0 0 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 16px;
+}
+
+.table-header h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+/* Table */
+.table-container {
   margin-bottom: 16px;
 }
 
 .transactions-table {
   width: 100%;
-  background: white;
-}
-
-.transactions-table .mat-mdc-header-row {
-  background-color: #f5f5f5;
 }
 
 .transactions-table .mat-mdc-header-cell {
-  font-weight: 600;
-  color: #333;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
   font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.transactions-table .mat-mdc-row {
-  border-bottom: 1px solid #e0e0e0;
-  transition: background-color 0.2s ease;
-}
-
-.transactions-table .mat-mdc-row:hover {
-  background-color: #f8f9fa;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 16px;
 }
 
 .transactions-table .mat-mdc-cell {
-  padding: 16px 12px;
-  border-bottom: none;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  font-size: 0.875rem;
+}
+
+.transaction-row {
+  transition: background-color 150ms cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.transaction-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .concepto-cell {
@@ -138,94 +184,146 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 500;
+}
+
+/* Amount Cells */
+.amount-header {
+  text-align: right !important;
 }
 
 .amount-cell {
   text-align: right;
-  font-weight: 600;
   font-family: 'Roboto Mono', monospace;
-  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .amount-cell.positive {
-  color: #4caf50;
+  color: #2e7d32;
 }
 
 .amount-cell.negative {
-  color: #f44336;
+  color: #d32f2f;
 }
 
 .amount-cell.saldo {
   color: #1976d2;
-  font-weight: 700;
+  font-weight: 600;
 }
 
-/* Category Select Styles */
+.no-amount {
+  color: rgba(0, 0, 0, 0.38);
+  font-style: italic;
+}
+
+/* Category Select */
 .category-select {
-  width: 100%;
-  min-width: 140px;
-}
-
-.category-select .mat-mdc-form-field-wrapper {
-  padding-bottom: 0;
-}
-
-.category-select .mat-mdc-form-field-flex {
-  height: 48px;
-  align-items: center;
-}
-
-.category-select .mdc-notched-outline {
-  border-radius: 8px;
-}
-
-.category-select .mat-mdc-select {
+  border: none;
+  background: transparent;
   font-size: 0.875rem;
+  min-width: 120px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.category-select .mat-mdc-select-trigger {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.category-select .mat-mdc-select-arrow {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.category-chip-selected {
+  padding: 6px 12px;
+  border-radius: 16px;
+  color: white;
+  font-size: 0.75rem;
   font-weight: 500;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .category-option {
-  color: white !important;
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.75rem;
   font-weight: 500;
-  margin: 2px 0;
-  border-radius: 4px;
-}
-
-/* Paginator */
-mat-paginator {
-  margin-top: 16px;
-  border-radius: 8px;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* No Data Card */
-.no-data-card {
-  margin: 48px 0;
+  display: inline-block;
+  min-width: 60px;
   text-align: center;
 }
 
-.no-data {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 32px;
-  color: #666;
+/* Paginator */
+.table-paginator {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin: 16px -24px -24px -24px;
+  background: transparent;
 }
 
-.no-data mat-icon {
-  font-size: 4rem;
-  width: 4rem;
-  height: 4rem;
-  color: #ccc;
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: rgba(0, 0, 0, 0.6);
 }
 
-.no-data p {
-  font-size: 1.1rem;
+.empty-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: rgba(0, 0, 0, 0.26);
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.empty-state p {
+  font-size: 0.875rem;
   margin: 0;
-  font-style: italic;
+  color: rgba(0, 0, 0, 0.38);
+}
+
+/* Global overrides for Material Design v20 MDC */
+::ng-deep .mat-mdc-select-panel {
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+::ng-deep .mat-mdc-option {
+  background: white !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected {
+  background: rgba(25, 118, 210, 0.12) !important;
+}
+
+::ng-deep .mat-mdc-paginator-page-size-select {
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-radius: 4px !important;
+  background: white !important;
+  font-size: 0.875rem !important;
+  min-height: 36px !important;
+  padding: 0 8px !important;
+}
+
+::ng-deep .mat-mdc-paginator-page-size-select .mat-mdc-select-trigger {
+  border: none !important;
+  background: transparent !important;
+  min-height: 34px !important;
 }
 
 /* Responsive Design */
@@ -233,45 +331,50 @@ mat-paginator {
   .movements-container {
     padding: 16px;
   }
-  
-  .header-card mat-card-title {
-    font-size: 1.5rem;
+
+  .page-header h1 {
+    font-size: 1.75rem;
   }
-  
-  .header-card mat-card-subtitle {
-    font-size: 1rem;
+
+  .filter-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
-  
-  .table-container {
-    padding: 8px;
+
+  .filter-actions {
+    flex-direction: column;
+    gap: 8px;
   }
-  
-  .page-size-selector {
-    justify-content: center;
+
+  .filter-actions button {
+    width: 100%;
   }
-  
-  .page-size-selector mat-form-field {
-    width: 150px;
+
+  .summary-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
   }
-  
-  .transactions-table {
-    font-size: 0.875rem;
+
+  .summary-amount {
+    font-size: 1.75rem;
   }
-  
+
+  .transactions-table .mat-mdc-header-cell,
   .transactions-table .mat-mdc-cell {
     padding: 12px 8px;
   }
-  
+
   .concepto-cell {
     max-width: 200px;
   }
-  
-  .summary-amount {
-    font-size: 1.5rem;
-  }
-  
+
   .category-select {
-    min-width: 120px;
+    min-width: 100px;
+  }
+
+  .table-paginator {
+    margin: 16px -16px -16px -16px;
   }
 }
 
@@ -279,16 +382,30 @@ mat-paginator {
   .movements-container {
     padding: 8px;
   }
-  
-  .summary-content {
-    text-align: center;
+
+  .page-header {
+    margin-bottom: 24px;
   }
-  
-  .summary-item {
-    justify-content: center;
+
+  .page-header h1 {
+    font-size: 1.5rem;
   }
-  
+
+  .summary-amount {
+    font-size: 1.5rem;
+  }
+
+  .transactions-table .mat-mdc-header-cell,
   .transactions-table .mat-mdc-cell {
     padding: 8px 4px;
+    font-size: 0.75rem;
+  }
+
+  .concepto-cell {
+    max-width: 150px;
+  }
+
+  .table-paginator {
+    margin: 16px -8px -8px -8px;
   }
 }

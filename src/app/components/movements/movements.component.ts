@@ -10,10 +10,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Transaction } from '../../model/transaction.model';
 import { Category } from '../../model/category.model';
 import { TransactionSearchParams } from '../../model/transaction-search-params.model';
 import { CriteriaResponse } from '../../model/criteria-response.model';
+import { CurrentBalanceResponse } from '../../model/current-balance-response.model';
 import { TransactionService } from '../../services/transaction.service';
 import { CategoryService } from '../../services/category.service';
 
@@ -31,7 +37,12 @@ import { CategoryService } from '../../services/category.service';
     MatFormFieldModule,
     MatButtonModule,
     MatPaginatorModule,
-    MatIconModule
+    MatIconModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatExpansionModule,
+    ReactiveFormsModule
   ],
   templateUrl: './movements.component.html',
   styleUrl: './movements.component.css'
@@ -40,7 +51,7 @@ export class MovementsComponent implements OnInit {
 
   transactions: Transaction[] = [];
   categories: Category[] = [];
-  latestTransaction: Transaction | null = null;
+  currentBalance: CurrentBalanceResponse | null = null;
   loading = true;
   displayedColumns: string[] = ['fechaOperacion', 'concepto', 'categoria', 'pagos', 'ingresos', 'saldo'];
   summaryColumns: string[] = ['tipo', 'saldo'];
@@ -50,29 +61,74 @@ export class MovementsComponent implements OnInit {
   pageSize = 10;
   totalElements = 0;
   pageSizeOptions = [5, 10, 25, 50, 100];
+  
+  // Filter properties
+  filterForm: FormGroup;
+  showFilters = false;
+  sortOptions = [
+    { value: 'fechaOperacion', label: 'Fecha de Operación' },
+    { value: 'concepto', label: 'Concepto' },
+    { value: 'pagos', label: 'Pagos' },
+    { value: 'ingresos', label: 'Ingresos' },
+    { value: 'saldo', label: 'Saldo' }
+  ];
+  sortDirectionOptions = [
+    { value: 'desc', label: 'Descendente' },
+    { value: 'asc', label: 'Ascendente' }
+  ];
 
   constructor(
     private transactionService: TransactionService,
-    private categoryService: CategoryService
-  ) {}
+    private categoryService: CategoryService,
+    private fb: FormBuilder
+  ) {
+    this.filterForm = this.fb.group({
+      operationDateFrom: [null],
+      operationDateTo: [null],
+      valueDateFrom: [null],
+      valueDateTo: [null],
+      concept: [''],
+      paymentAmountFrom: [null],
+      paymentAmountTo: [null],
+      incomeAmountFrom: [null],
+      incomeAmountTo: [null],
+      categoryIds: [[]],
+      sortBy: ['fechaOperacion'],
+      sortDirection: ['desc']
+    });
+  }
 
   ngOnInit(): void {
+    this.loadCurrentBalance();
     this.loadTransactions();
     this.loadCategories();
   }
 
   private loadTransactions(): void {
     this.loading = true;
+    const formValue = this.filterForm.value;
+    
     const searchParams: TransactionSearchParams = {
       pageNumber: this.currentPage,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
+      operationDateFrom: formValue.operationDateFrom,
+      operationDateTo: formValue.operationDateTo,
+      valueDateFrom: formValue.valueDateFrom,
+      valueDateTo: formValue.valueDateTo,
+      concept: formValue.concept || undefined,
+      paymentAmountFrom: formValue.paymentAmountFrom,
+      paymentAmountTo: formValue.paymentAmountTo,
+      incomeAmountFrom: formValue.incomeAmountFrom,
+      incomeAmountTo: formValue.incomeAmountTo,
+      categoryIds: formValue.categoryIds && formValue.categoryIds.length > 0 ? formValue.categoryIds : undefined,
+      sortBy: formValue.sortBy || 'fechaOperacion',
+      sortDirection: formValue.sortDirection || 'desc'
     };
     
     this.transactionService.getByCriteria(searchParams).subscribe({
       next: (response: CriteriaResponse) => {
         this.transactions = response.elements;
         this.totalElements = response.totalElementsFound;
-        this.latestTransaction = this.getLatestTransaction(response.elements);
         this.loading = false;
       },
       error: (error) => {
@@ -94,13 +150,14 @@ export class MovementsComponent implements OnInit {
     this.loadTransactions();
   }
 
-  private getLatestTransaction(transactions: Transaction[]): Transaction | null {
-    if (transactions.length === 0) return null;
-
-    return transactions.reduce((latest, current) => {
-      const latestDate = new Date(latest.fechaOperacion);
-      const currentDate = new Date(current.fechaOperacion);
-      return currentDate > latestDate ? current : latest;
+  private loadCurrentBalance(): void {
+    this.transactionService.getCurrentBalance().subscribe({
+      next: (balance: CurrentBalanceResponse) => {
+        this.currentBalance = balance;
+      },
+      error: (error) => {
+        console.error('Error loading current balance:', error);
+      }
     });
   }
 
@@ -145,9 +202,8 @@ export class MovementsComponent implements OnInit {
         if (index !== -1) {
           this.transactions[index] = result;
         }
-        if (this.latestTransaction && this.latestTransaction.id === transaction.id) {
-          this.latestTransaction = result;
-        }
+        // Reload balance after category change
+        this.loadCurrentBalance();
       },
       error: (error) => {
         console.error('Error updating transaction category:', error);
@@ -155,6 +211,34 @@ export class MovementsComponent implements OnInit {
         transaction.category = oldCategory;
       }
     });
+  }
+
+  onFilterChange(): void {
+    this.currentPage = 0;
+    this.loadTransactions();
+  }
+
+  clearFilters(): void {
+    this.filterForm.reset({
+      operationDateFrom: null,
+      operationDateTo: null,
+      valueDateFrom: null,
+      valueDateTo: null,
+      concept: '',
+      paymentAmountFrom: null,
+      paymentAmountTo: null,
+      incomeAmountFrom: null,
+      incomeAmountTo: null,
+      categoryIds: [],
+      sortBy: 'fechaOperacion',
+      sortDirection: 'desc'
+    });
+    this.currentPage = 0;
+    this.loadTransactions();
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
   }
 
 }

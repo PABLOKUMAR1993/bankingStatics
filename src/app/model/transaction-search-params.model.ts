@@ -11,4 +11,6 @@ export interface TransactionSearchParams {
   incomeAmountFrom?: number;
   incomeAmountTo?: number;
   categoryIds?: number[];
+  sortBy?: string;
+  sortDirection?: string;
 }
