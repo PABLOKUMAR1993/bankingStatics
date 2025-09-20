@@ -8,6 +8,6 @@ export interface Transaction {
   pagos: number;
   ingresos: number;
   saldo: number;
-  category: Category;
+  category?: Category;
   notes?: string;
 }

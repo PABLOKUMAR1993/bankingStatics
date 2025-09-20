@@ -1,13 +1,17 @@
 export const API_CONFIG = {
-  BASE_URL: 'http://localhost:3000',
+  BASE_URL: 'http://localhost:8080',
+  API_BASE_PATH: '/api/v1',
   ENDPOINTS: {
-    TRANSACTIONS: {
-      BASE: '/transactions',
-      BY_ID: (id: number): string => `/transactions/${id}`,
-    },
     CATEGORIES: {
-      BASE: '/categories',
-      BY_ID: (id: number): string => `/categories/${id}`,
+      BASE: '/api/v1/categories',
+      BULK_UPDATE: '/api/v1/categories/bulk-update',
+      BULK_CREATE: '/api/v1/categories/bulk-create'
+    },
+    TRANSACTIONS: {
+      BASE: '/api/v1/transactions',
+      UPDATE: (id: number): string => `/api/v1/transactions/${id}`,
+      BULK_CREATE: '/api/v1/transactions/bulk-create',
+      SEARCH: '/api/v1/transactions/search'
     }
   }
 };

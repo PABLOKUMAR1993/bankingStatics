@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Transaction } from '../model/transaction.model';
+import { TransactionSearchParams } from '../model/transaction-search-params.model';
+import { CriteriaResponse } from '../model/criteria-response.model';
 import { API_CONFIG } from '../constants/api.constants';
 
 @Injectable({
@@ -11,7 +13,7 @@ export class TransactionService {
 
   // Attributes
 
-  private baseUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTIONS.BASE}`;
+  private baseUrl = `${API_CONFIG.BASE_URL}`;
 
   // Constructor
 
@@ -19,48 +21,16 @@ export class TransactionService {
 
   // Methods
 
-  public getAll(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(this.baseUrl);
-  }
-
-  public getById(id: number): Observable<Transaction> {
-    return this.http.get<Transaction>(`${this.baseUrl}/${id}`);
-  }
-
-  public create(transaction: Omit<Transaction, 'id'>): Observable<Transaction> {
-    return this.http.post<Transaction>(this.baseUrl, transaction);
-  }
-
-  public update(id: number, transaction: Transaction): Observable<Transaction> {
-    return this.http.put<Transaction>(`${this.baseUrl}/${id}`, transaction);
-  }
-
-  public delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  public updateOne(id: number, transaction: Transaction): Observable<Transaction> {
+    return this.http.put<Transaction>(`${this.baseUrl}${API_CONFIG.ENDPOINTS.TRANSACTIONS.UPDATE(id)}`, transaction);
   }
 
   public createBulk(transactions: Omit<Transaction, 'id'>[]): Observable<Transaction[]> {
-    const requests = transactions.map(transaction => this.create(transaction));
-    return new Observable(observer => {
-      const results: Transaction[] = [];
-      let completed = 0;
+    return this.http.post<Transaction[]>(`${this.baseUrl}${API_CONFIG.ENDPOINTS.TRANSACTIONS.BULK_CREATE}`, transactions);
+  }
 
-      requests.forEach((request, index) => {
-        request.subscribe({
-          next: (result) => {
-            results[index] = result;
-            completed++;
-            if (completed === requests.length) {
-              observer.next(results);
-              observer.complete();
-            }
-          },
-          error: (error) => {
-            observer.error(error);
-          }
-        });
-      });
-    });
+  public getByCriteria(searchParams: TransactionSearchParams): Observable<CriteriaResponse> {
+    return this.http.post<CriteriaResponse>(`${this.baseUrl}${API_CONFIG.ENDPOINTS.TRANSACTIONS.SEARCH}`, searchParams);
   }
 
 }
