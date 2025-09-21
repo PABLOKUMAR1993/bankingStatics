@@ -1,0 +1,167 @@
+<div class="categories-container">
+  <!-- Header -->
+  <div class="page-header">
+    <h1>Gestión de Categorías</h1>
+    <p class="page-subtitle">Administra las categorías de tus transacciones</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando categorías...</p>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!loading">
+    <!-- Add New Category Button -->
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="toggleNewCategoryForm()">
+        <mat-icon>{{ showNewCategoryForm ? 'close' : 'add' }}</mat-icon>
+        {{ showNewCategoryForm ? 'Cancelar' : 'Nueva Categoría' }}
+      </button>
+    </div>
+
+    <!-- New Category Form -->
+    <mat-card class="new-category-card" *ngIf="showNewCategoryForm">
+      <mat-card-content>
+        <div class="new-category-header">
+          <h3>Crear Nueva Categoría</h3>
+        </div>
+        
+        <form [formGroup]="newCategoryForm" (ngSubmit)="createCategory()">
+          <div class="form-row">
+            <mat-form-field class="name-field">
+              <mat-label>Nombre de la Categoría</mat-label>
+              <input matInput formControlName="name" placeholder="Ej: Alimentación">
+              <mat-error *ngIf="newCategoryForm.get('name')?.hasError('required')">
+                El nombre es requerido
+              </mat-error>
+              <mat-error *ngIf="newCategoryForm.get('name')?.hasError('minlength')">
+                El nombre debe tener al menos 1 carácter
+              </mat-error>
+            </mat-form-field>
+            
+            <div class="color-field">
+              <mat-form-field>
+                <mat-label>Color</mat-label>
+                <input matInput type="color" formControlName="color">
+              </mat-form-field>
+              <button mat-icon-button type="button" (click)="setRandomColor()" matTooltip="Color aleatorio">
+                <mat-icon>palette</mat-icon>
+              </button>
+            </div>
+            
+            <div class="color-preview">
+              <div class="color-chip" [style.background-color]="newCategoryForm.get('color')?.value">
+                {{ newCategoryForm.get('name')?.value || 'Vista previa' }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!newCategoryForm.valid">
+              <mat-icon>save</mat-icon>
+              Crear Categoría
+            </button>
+            <button mat-button type="button" (click)="toggleNewCategoryForm()">
+              <mat-icon>cancel</mat-icon>
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Categories Table -->
+    <mat-card class="table-card">
+      <mat-card-content>
+        <div class="table-header">
+          <h2>Categorías ({{ categories.length }} total)</h2>
+        </div>
+        
+        <div class="table-container">
+          <table mat-table [dataSource]="categories" class="categories-table">
+
+            <ng-container matColumnDef="color">
+              <th mat-header-cell *matHeaderCellDef>Color</th>
+              <td mat-cell *matCellDef="let category">
+                <div class="color-indicator" [style.background-color]="category.color"></div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Nombre</th>
+              <td mat-cell *matCellDef="let category">
+                <div *ngIf="editingCategory?.id !== category.id" class="category-display">
+                  <span class="category-chip" [style.background-color]="category.color">
+                    {{ category.name }}
+                  </span>
+                </div>
+                
+                <form *ngIf="editingCategory?.id === category.id" [formGroup]="editForm" (ngSubmit)="saveEdit()" class="edit-form">
+                  <div class="edit-row">
+                    <mat-form-field class="edit-name-field">
+                      <mat-label>Nombre</mat-label>
+                      <input matInput formControlName="name">
+                      <mat-error *ngIf="editForm.get('name')?.hasError('required')">
+                        El nombre es requerido
+                      </mat-error>
+                    </mat-form-field>
+                    
+                    <mat-form-field class="edit-color-field">
+                      <mat-label>Color</mat-label>
+                      <input matInput type="color" formControlName="color">
+                    </mat-form-field>
+                    
+                    <div class="color-preview">
+                      <div class="color-chip" [style.background-color]="editForm.get('color')?.value">
+                        {{ editForm.get('name')?.value }}
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef class="actions-header">Acciones</th>
+              <td mat-cell *matCellDef="let category" class="actions-cell">
+                <div *ngIf="editingCategory?.id !== category.id" class="action-buttons">
+                  <button mat-icon-button color="primary" (click)="startEdit(category)" matTooltip="Editar">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="deleteCategory(category)" matTooltip="Eliminar">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                
+                <div *ngIf="editingCategory?.id === category.id" class="action-buttons">
+                  <button mat-icon-button color="primary" (click)="saveEdit()" [disabled]="!editForm.valid" matTooltip="Guardar">
+                    <mat-icon>save</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="cancelEdit()" matTooltip="Cancelar">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="category-row"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Empty State -->
+    <div *ngIf="categories.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">category</mat-icon>
+      <h3>No hay categorías</h3>
+      <p>Crea tu primera categoría para comenzar a organizar tus transacciones</p>
+      <button mat-raised-button color="primary" (click)="toggleNewCategoryForm()">
+        <mat-icon>add</mat-icon>
+        Crear Primera Categoría
+      </button>
+    </div>
+  </div>
+</div>
