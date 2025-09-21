@@ -1,4 +1,5 @@
 import {Category} from './category.model';
+import {User} from './user.model';
 
 export interface Transaction {
   id: number;
@@ -9,5 +10,6 @@ export interface Transaction {
   ingresos: number;
   saldo: number;
   category?: Category;
+  user: User;
   notes?: string;
 }
