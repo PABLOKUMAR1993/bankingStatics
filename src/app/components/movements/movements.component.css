@@ -84,14 +84,16 @@
 }
 
 .category-chip {
-  padding: 4px 8px;
+  padding: 6px 12px;
   border-radius: 12px;
   color: white;
   font-size: 0.75rem;
   font-weight: 500;
-  display: inline-block;
-  min-width: 60px;
+  display: block;
+  width: 80%;
+  margin: 0 auto;
   text-align: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Summary Card */
@@ -220,7 +222,7 @@
   border: none;
   background: transparent;
   font-size: 0.875rem;
-  min-width: 120px;
+  min-width: 180px;
   color: rgba(0, 0, 0, 0.87);
 }
 
@@ -240,21 +242,64 @@
   color: white;
   font-size: 0.75rem;
   font-weight: 500;
-  display: inline-block;
-  min-width: 80px;
+  display: block;
+  width: 80%;
+  margin: 0 auto;
   text-align: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .category-option {
-  padding: 4px 8px;
+  padding: 6px 12px;
   border-radius: 12px;
   color: white;
   font-size: 0.75rem;
   font-weight: 500;
-  display: inline-block;
-  min-width: 60px;
+  display: block;
+  width: 80%;
+  margin: 0 auto;
   text-align: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Category Search Container */
+.category-search-container {
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fafafa;
+}
+
+.category-search-field {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.category-search-field .mat-mdc-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.category-search-field .mat-mdc-text-field-wrapper {
+  border-radius: 4px;
+  background: white;
+  min-height: 32px;
+}
+
+.category-search-field .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.category-search-field .mat-mdc-form-field-infix {
+  padding: 6px 0;
+  min-height: 20px;
+}
+
+.category-search-field input {
+  font-size: 0.75rem;
+  height: 20px;
+}
+
+.category-search-field mat-label {
+  font-size: 0.75rem;
 }
 
 /* Paginator */
@@ -297,6 +342,7 @@
   background: white !important;
   border-radius: 8px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  min-width: 300px !important;
 }
 
 ::ng-deep .mat-mdc-option {

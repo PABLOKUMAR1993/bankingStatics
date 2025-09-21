@@ -51,6 +51,8 @@ export class MovementsComponent implements OnInit {
 
   transactions: Transaction[] = [];
   categories: Category[] = [];
+  filteredCategories: Category[] = [];
+  categorySearchTerm = '';
   currentBalance: CurrentBalanceResponse | null = null;
   loading = true;
   displayedColumns: string[] = ['fechaOperacion', 'concepto', 'categoria', 'pagos', 'ingresos', 'saldo'];
@@ -176,11 +178,27 @@ export class MovementsComponent implements OnInit {
     this.categoryService.getAll().subscribe({
       next: (categories) => {
         this.categories = categories;
+        this.filteredCategories = categories;
       },
       error: (error) => {
         console.error('Error loading categories:', error);
       }
     });
+  }
+
+  filterCategories(): void {
+    if (!this.categorySearchTerm.trim()) {
+      this.filteredCategories = this.categories;
+    } else {
+      this.filteredCategories = this.categories.filter(category =>
+        category.name.toLowerCase().includes(this.categorySearchTerm.toLowerCase())
+      );
+    }
+  }
+
+  clearCategorySearch(): void {
+    this.categorySearchTerm = '';
+    this.filteredCategories = this.categories;
   }
 
   onCategoryChange(transaction: Transaction, newCategoryId: number): void {

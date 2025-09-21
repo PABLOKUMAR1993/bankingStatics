@@ -179,12 +179,35 @@
                       {{ transaction.category.name }}
                     </span>
                   </mat-select-trigger>
+                  
+                  <div class="category-search-container">
+                    <mat-form-field appearance="outline" class="category-search-field">
+                      <mat-label>Buscar categoría</mat-label>
+                      <input matInput 
+                             [(ngModel)]="categorySearchTerm" 
+                             (input)="filterCategories()"
+                             (click)="$event.stopPropagation()"
+                             placeholder="Escriba para buscar...">
+                      <mat-icon matSuffix>search</mat-icon>
+                      <button mat-icon-button matSuffix 
+                              *ngIf="categorySearchTerm" 
+                              (click)="clearCategorySearch(); $event.stopPropagation()"
+                              type="button">
+                        <mat-icon>clear</mat-icon>
+                      </button>
+                    </mat-form-field>
+                  </div>
+                  
                   <mat-option 
-                    *ngFor="let category of categories"
+                    *ngFor="let category of filteredCategories"
                     [value]="category.id">
                     <span class="category-option" [style.background-color]="category.color">
                       {{ category.name }}
                     </span>
+                  </mat-option>
+                  
+                  <mat-option *ngIf="filteredCategories.length === 0" disabled>
+                    No se encontraron categorías
                   </mat-option>
                 </mat-select>
               </td>
