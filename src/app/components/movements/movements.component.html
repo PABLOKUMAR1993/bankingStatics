@@ -88,7 +88,7 @@
               
               <mat-form-field>
                 <mat-label>Categorías</mat-label>
-                <mat-select formControlName="categoryIds" multiple (selectionChange)="onFilterChange()">
+                <mat-select formControlName="categoryIds" multiple>
                   <mat-option *ngFor="let category of categories" [value]="category.id">
                     <span class="category-chip" [style.background-color]="category.color">
                       {{ category.name }}
@@ -99,7 +99,7 @@
               
               <mat-form-field>
                 <mat-label>Ordenar por</mat-label>
-                <mat-select formControlName="sortBy" (selectionChange)="onFilterChange()">
+                <mat-select formControlName="sortBy">
                   <mat-option *ngFor="let option of sortOptions" [value]="option.value">
                     {{ option.label }}
                   </mat-option>
@@ -108,7 +108,7 @@
               
               <mat-form-field>
                 <mat-label>Dirección</mat-label>
-                <mat-select formControlName="sortDirection" (selectionChange)="onFilterChange()">
+                <mat-select formControlName="sortDirection">
                   <mat-option *ngFor="let option of sortDirectionOptions" [value]="option.value">
                     {{ option.label }}
                   </mat-option>
