@@ -26,7 +26,7 @@ export class TransactionService {
     return this.http.put<Transaction>(`${this.baseUrl}${API_CONFIG.ENDPOINTS.TRANSACTIONS.UPDATE(id)}`, transaction);
   }
 
-  public createBulk(transactions: Omit<Transaction, 'id'>[]): Observable<Transaction[]> {
+  public createBulk(transactions: Omit<Transaction, 'id' | 'user'>[]): Observable<Transaction[]> {
     return this.http.post<Transaction[]>(`${this.baseUrl}${API_CONFIG.ENDPOINTS.TRANSACTIONS.BULK_CREATE}`, transactions);
   }
 

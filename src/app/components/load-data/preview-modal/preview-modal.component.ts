@@ -85,7 +85,7 @@ export class PreviewModalComponent implements OnInit {
   onConfirm(): void {
     this.isImporting = true;
     
-    const transactionsToCreate: Omit<Transaction, 'id'>[] = this.data.map(item => ({
+    const transactionsToCreate: Omit<Transaction, 'id' | 'user'>[] = this.data.map(item => ({
       fechaOperacion: item.fechaOperacion,
       fechaValor: item.fechaValor,
       concepto: item.concepto,

@@ -1,8 +1,9 @@
 .nav-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   height: 100%;
+  width: 100%;
 }
 
 .nav-links {
@@ -18,4 +19,26 @@
 
 .nav-links a.active {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.auth-section {
+  display: flex;
+  align-items: center;
+}
+
+.auth-links {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.username {
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
 }

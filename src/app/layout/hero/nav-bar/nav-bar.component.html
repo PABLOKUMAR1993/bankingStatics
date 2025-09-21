@@ -1,8 +1,22 @@
 <nav class="nav-container">
   <div class="nav-links">
     <a mat-button routerLink="/home" routerLinkActive="active">Inicio</a>
-    <a mat-button routerLink="/load-data" routerLinkActive="active">Cargar Datos</a>
-    <a mat-button routerLink="/movements" routerLinkActive="active">Movimientos</a>
-    <a mat-button routerLink="/categories" routerLinkActive="active">Categorías</a>
+    <a mat-button routerLink="/load-data" routerLinkActive="active" *ngIf="isLoggedIn">Cargar Datos</a>
+    <a mat-button routerLink="/movements" routerLinkActive="active" *ngIf="isLoggedIn">Movimientos</a>
+    <a mat-button routerLink="/categories" routerLinkActive="active" *ngIf="isLoggedIn">Categorías</a>
+  </div>
+  
+  <div class="auth-section">
+    <div *ngIf="!isLoggedIn" class="auth-links">
+      <a mat-button routerLink="/login">Iniciar Sesión</a>
+      <a mat-button routerLink="/register">Registrarse</a>
+    </div>
+    
+    <div *ngIf="isLoggedIn" class="user-section">
+      <span class="username">{{ user?.nombreUsuario }}</span>
+      <button mat-icon-button (click)="logout()" title="Cerrar sesión">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
   </div>
 </nav>

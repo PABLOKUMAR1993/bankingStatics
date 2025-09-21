@@ -1,0 +1,40 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.error-message {
+  color: #f44336;
+  margin: 16px 0;
+  text-align: center;
+}
+
+mat-card-actions {
+  justify-content: center;
+}
+
+mat-card-actions p {
+  margin: 0;
+}
+
+mat-card-actions a {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+mat-card-actions a:hover {
+  text-decoration: underline;
+}

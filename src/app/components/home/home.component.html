@@ -1,4 +1,11 @@
 <div class="home-container">
   <h1>Banking Statistics</h1>
   <p>Welcome to your expense management application</p>
+  
+  <div *ngIf="isLoggedIn" class="welcome-message">
+    <div class="success-message">
+      ¡Loggeado correctamente!
+    </div>
+    <p *ngIf="user">Bienvenido, {{ user.nombreUsuario }}!</p>
+  </div>
 </div>

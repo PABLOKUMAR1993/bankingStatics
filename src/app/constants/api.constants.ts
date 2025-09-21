@@ -13,6 +13,11 @@ export const API_CONFIG = {
       BULK_CREATE: '/api/v1/transactions/bulk-create',
       SEARCH: '/api/v1/transactions/search',
       CURRENT_BALANCE: '/api/v1/transactions/current-balance'
+    },
+    AUTH: {
+      REGISTER: '/api/auth/register',
+      LOGIN: '/api/auth/login',
+      LOGOUT: '/api/auth/logout'
     }
   }
 };
